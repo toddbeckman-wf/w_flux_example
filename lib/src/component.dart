@@ -26,7 +26,7 @@ class ExampleComponent extends FluxUiComponent<ExampleProps> {
       return true;
     }
 
-    final nextPeople = props.selector(nextProps.store);
+    final nextStore = props.selector(nextProps.store);
 
     // If every field matches, return false.
     //
@@ -34,8 +34,13 @@ class ExampleComponent extends FluxUiComponent<ExampleProps> {
     // missing a check when either the component or store is updated. We would
     // rather return true and update unnecessarily than fail to rerender when
     // it should.
-    if (nextPeople[marioKey] == _substore[marioKey] &&
-        nextPeople[luigiKey] == _substore[luigiKey]) {
+    if (nextStore.keys.length == _substore.keys.length) {
+      for (var key in nextStore.keys) {
+        if (nextStore[key] != _substore[key]) {
+          return true;
+        }
+      }
+
       return false;
     }
 
@@ -45,6 +50,7 @@ class ExampleComponent extends FluxUiComponent<ExampleProps> {
 
   @override
   void componentWillUpdate(ExampleProps newProps, Map newState) {
+    // TODO: decide if this can be moved to [shouldComponentUpdate]
     _substore = props.selector(newProps.store);
   }
 
@@ -57,37 +63,37 @@ class ExampleComponent extends FluxUiComponent<ExampleProps> {
   ReactElement render() {
     print('Rerender!');
     return Dom.table()(
-        Dom.tbody()(
-          Dom.tr()(
-            Dom.td()(),
-            Dom.td()('Number of presses'),
-          ),
-          Dom.tr()(
-            Dom.td()((Dom.button()
-              ..onClick = (_) => props.actions.pickMario())('Tally Mario')),
-            Dom.td()(
-              props.store.marioCount,
-            ),
-          ),
-          Dom.tr()(
-            Dom.td()(
-              (Dom.button()
-                ..onClick = (_) => props.actions.pickLuigi())('Tally Luigi'),
-            ),
-            Dom.td()(
-              props.store.luigiCount,
-            ),
-          ),
-          Dom.tr()(
-            Dom.td()(
-              (Dom.button()
-                ..onClick = (_) => props.actions.pickYoshi())('Tally Yoshi'),
-            ),
-            Dom.td()(
-              props.store.yoshiCount,
-            ),
+      Dom.tbody()(
+        Dom.tr()(
+          Dom.td()(),
+          Dom.td()('Number of presses'),
+        ),
+        Dom.tr()(
+          Dom.td()((Dom.button()
+            ..onClick = (_) => props.actions.pickMario())('Tally Mario')),
+          Dom.td()(
+            props.store.marioCount,
           ),
         ),
-      );
+        Dom.tr()(
+          Dom.td()(
+            (Dom.button()
+              ..onClick = (_) => props.actions.pickLuigi())('Tally Luigi'),
+          ),
+          Dom.td()(
+            props.store.luigiCount,
+          ),
+        ),
+        Dom.tr()(
+          Dom.td()(
+            (Dom.button()
+              ..onClick = (_) => props.actions.pickYoshi())('Tally Yoshi'),
+          ),
+          Dom.td()(
+            props.store.yoshiCount,
+          ),
+        ),
+      ),
+    );
   }
 }

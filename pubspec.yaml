@@ -1,0 +1,20 @@
+name: w_flux_example
+version: 1.0.0
+description: An H5 editor application for all.
+authors:
+  - Todd Beckman <todd.beckman@workiva.com>
+homepage: https://github.com/toddbeckman-wf/w_flux_example
+
+environment:
+  sdk: ">=1.24.2 <2.0.0"
+
+dependencies:
+  over_react: ^1.25.2
+  w_flux: ^2.9.5
+
+dev_dependencies:
+  dart_dev: ^1.9.6
+  dart_style: any
+
+transformers:
+  - over_react
